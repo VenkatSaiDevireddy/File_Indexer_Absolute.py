@@ -1,6 +1,5 @@
 import os
 import pandas as pd
-import sys
 import tkinter.filedialog as tkfd
 
 d_ext_desc = {'csv':'CSV file',
@@ -57,11 +56,13 @@ def ext_desc(ext):
         pass
     return desc
 
-def generate_index(path=None, max=0):
+path = tkfd.askdirectory() # Request for path
+
+def generate_index(path=path, max=0):
     # stops generating index whenever there are more than 500 records, to test if the script works
     # use 'max=0' to generate the full index
     
-    path = path if path else tkfd.askdirectory() # Request path if not provided
+    #path = path if path else tkfd.askdirectory() # Request path if not provided
 
     df = pd.DataFrame(columns=['File','File Type','Folder Location','Link','Path'])
     for root, _ , files in os.walk(path):
@@ -84,5 +85,7 @@ def generate_index(path=None, max=0):
   
 if __name__ == '__main__':
     df = generate_index(max=0)
-    df.to_excel('file_index.xlsx')
+    save_location = path + "/" + "files_index.xlsx"
+    df.to_excel(save_location,sheet_name="Hyperlinks",freeze_panes=[1,0])
+    
 #hosted with ❤ by GitHub
